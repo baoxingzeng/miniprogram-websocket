@@ -1,0 +1,126 @@
+import terser from "@rollup/plugin-terser";
+import typescript from "@rollup/plugin-typescript";
+import { dts } from "rollup-plugin-dts";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+
+export default [
+    // CommonJS
+    {
+        input: "src/index.ts",
+        output: {
+            dir: "dist/cjs",
+            format: "cjs",
+            preserveModules: true,
+        },
+        external: [
+            "fetch-xhr-shim",
+            "fetch-xhr-shim/dev",
+            "miniprogram-platform",
+        ],
+        plugins: [
+            typescript({
+                outDir: "dist/cjs",
+                declarationDir: "dist/cjs/types",
+                ignoreDeprecations: "6.0",
+            }),
+        ],
+    },
+
+    // // CommonJS (singlefile)
+    // {
+    //     input: "src/index.ts",
+    //     output: {
+    //         file: "dist/miniprogram-websocket.cjs.js",
+    //         format: "cjs",
+    //     },
+    //     plugins: [
+    //         typescript({
+    //             declarationDir: "dist/types",
+    //             ignoreDeprecations: "6.0",
+    //         }),
+    //         nodeResolve(),
+    //     ],
+    // },
+
+    // CommonJS (singlefile, minimized)
+    {
+        input: "src/index.ts",
+        output: {
+            file: "dist/miniprogram-websocket.cjs.min.js",
+            format: "cjs",
+        },
+        plugins: [
+            typescript({
+                declarationDir: "dist/types",
+                ignoreDeprecations: "6.0",
+            }),
+            nodeResolve(),
+            terser(),
+        ],
+    },
+
+    // ES6
+    {
+        input: "src/index.ts",
+        output: {
+            dir: "dist/esm",
+            format: "es",
+            preserveModules: true,
+        },
+        external: [
+            "fetch-xhr-shim",
+            "fetch-xhr-shim/dev",
+            "miniprogram-platform",
+        ],
+        plugins: [
+            typescript({
+                outDir: "dist/esm",
+                declarationDir: "dist/esm/types",
+                ignoreDeprecations: "6.0",
+            }),
+        ],
+    },
+
+    // // ES6 (singlefile)
+    // {
+    //     input: "src/index.ts",
+    //     output: {
+    //         file: "dist/miniprogram-websocket.esm.js",
+    //         format: "es",
+    //     },
+    //     plugins: [
+    //         typescript({
+    //             declarationDir: "dist/types",
+    //             ignoreDeprecations: "6.0",
+    //         }),
+    //         nodeResolve(),
+    //     ],
+    // },
+
+    // ES6 (singlefile, minimized)
+    {
+        input: "src/index.ts",
+        output: {
+            file: "dist/miniprogram-websocket.esm.min.js",
+            format: "es",
+        },
+        plugins: [
+            typescript({
+                declarationDir: "dist/types",
+                ignoreDeprecations: "6.0",
+            }),
+            nodeResolve(),
+            terser(),
+        ],
+    },
+
+    // Types
+    {
+        input: "dist/esm/types/index.d.ts",
+        output: {
+            file: "dist/index.d.ts",
+            format: "es",
+        },
+        plugins: [dts()],
+    },
+];
