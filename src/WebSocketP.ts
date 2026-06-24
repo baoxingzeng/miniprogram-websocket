@@ -21,12 +21,13 @@ import { CloseEventP } from "./CloseEventP";
 import { MessageEventP } from "./MessageEventP";
 import type {
     ISocketTask,
-    TConnectSocketFunc
+    TConnectSocketFunc,
+    IConnectSocketOption
 } from "./connectSocket";
-import { platform, getConnectSocket } from "./connectSocket";
+import { platform, getConnectSocketFunc } from "./connectSocket";
 
-const mp = { connectSocket: getConnectSocket() };
-export function setConnectSocket(connectSocket: unknown) { mp.connectSocket = connectSocket as TConnectSocketFunc; }
+const mp = { connectSocket: getConnectSocketFunc() };
+export function setConnectSocketFunc(connectSocket: unknown) { mp.connectSocket = connectSocket as TConnectSocketFunc; }
 
 export class WebSocketP extends EventTargetP implements WebSocket {
     static get CONNECTING(): 0 { return 0; }
@@ -39,17 +40,19 @@ export class WebSocketP extends EventTargetP implements WebSocket {
         super();
 
         const targetURL = "" + url;
-        const socketTask = mp.connectSocket({
+        const options: IConnectSocketOption = {
             url: targetURL,
-            protocols: protocols !== undefined
-                ? isSequence(protocols)
-                    ? Array.isArray(protocols) ? protocols : Array.from<string>(protocols)
-                    : ["" + protocols]
-                : [],
             multiple: true, // Alipay Mini Program
             fail(err: unknown) { console.error(err); },
-        });
+        };
 
+        if (protocols !== undefined) {
+            options.protocols = isSequence(protocols)
+                ? Array.isArray(protocols) ? protocols : Array.from<string>(protocols)
+                : ["" + protocols];
+        }
+
+        const socketTask = mp.connectSocket(options);
         setState(this, "__WebSocket__", new WebSocketState(this, socketTask));
         state(this).url = targetURL;
 
@@ -188,7 +191,6 @@ function onClose(socket: WebSocketP) {
     let s = state(socket);
     s.socketTask.onClose(res => {
         s.readyState = 3 /* CLOSED */;
-
         let event = new CloseEventP("close", {
             wasClean: !s.error,
             code: res.code,
@@ -204,7 +206,6 @@ function onError(socket: WebSocketP) {
     let s = state(socket);
     s.socketTask.onError(res => {
         console.error(res);
-
         s.error = res;
         s.readyState = 3 /* CLOSED */;
         emitEvent(socket, "error");
@@ -220,7 +221,6 @@ function onMessage(socket: WebSocketP) {
         if (data && typeof data === "object" && "data" in data) {
             _data = data.data;
             if ("isBuffer" in data && data.isBuffer && typeof _data === "string") {
-                // @ts-ignore
                 try { _data = platform.mp.base64ToArrayBuffer(_data); } catch (e) { }
             }
         } else {

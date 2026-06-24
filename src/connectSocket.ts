@@ -8,7 +8,7 @@ export const platform = getPlatform() as {
     };
 };
 
-export function getConnectSocket() {
+export function getConnectSocketFunc() {
     return platform ? platform.mp.connectSocket : function errorConnectSocket(options: IConnectSocketOption): ISocketTask {
         return {
             send(obj) { },
