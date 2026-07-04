@@ -1,9 +1,10 @@
 {
   "name": "miniprogram-websocket",
-  "version": "0.0.1-beta",
+  "version": "1.0.0",
   "license": "MIT",
   "author": "Xingzeng Bao",
-  "description": "",
+  "homepage": "https://github.com/baoxingzeng/miniprogram-websocket",
+  "description": "A WebSocket API polyfill for mini programs.",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -15,11 +16,28 @@
     "!dist/cjs/types/**/*",
     "!dist/esm/types/**/*"
   ],
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dev": {
+      "require": "./dist/cjs/dev.js",
+      "import": "./dist/esm/dev.js",
+      "types": "./dist/dev.d.ts"
+    }
+  },
   "sideEffects": false,
   "scripts": {
     "build": "rollup --config",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Follow the instructions in tests/README.txt to run the tests.\" && exit 1"
   },
+  "keywords": [
+    "miniprogram",
+    "websocket",
+    "polyfill"
+  ],
   "dependencies": {
     "fetch-xhr-shim": ">=1.0.0",
     "miniprogram-platform": ">=1.0.0"

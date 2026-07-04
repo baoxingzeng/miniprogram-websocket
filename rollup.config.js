@@ -26,6 +26,22 @@ export default [
         ],
     },
 
+    // CommonJS (singlefile)
+    {
+        input: "src/index.ts",
+        output: {
+            file: "dist/miniprogram-websocket.cjs.js",
+            format: "cjs",
+        },
+        plugins: [
+            typescript({
+                declarationDir: "dist/types",
+                ignoreDeprecations: "6.0",
+            }),
+            nodeResolve(),
+        ],
+    },
+
     // CommonJS (singlefile, minimized)
     {
         input: "src/index.ts",
@@ -65,6 +81,22 @@ export default [
         ],
     },
 
+    // ES6 (singlefile)
+    {
+        input: "src/index.ts",
+        output: {
+            file: "dist/miniprogram-websocket.esm.js",
+            format: "es",
+        },
+        plugins: [
+            typescript({
+                declarationDir: "dist/types",
+                ignoreDeprecations: "6.0",
+            }),
+            nodeResolve(),
+        ],
+    },
+
     // ES6 (singlefile, minimized)
     {
         input: "src/index.ts",
@@ -82,7 +114,6 @@ export default [
         ],
     },
 
-
     // Types
     {
         input: "dist/esm/types/index.d.ts",
@@ -92,7 +123,6 @@ export default [
         },
         plugins: [dts()],
     },
-
     // Types (dev)
     {
         input: "dist/esm/types/dev.d.ts",
