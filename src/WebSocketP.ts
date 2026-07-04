@@ -15,6 +15,7 @@ import {
     Event_setTrusted,
     EventTarget_dispatchEvent,
     isSequence,
+    isBlob,
     isArrayBuffer
 } from "fetch-xhr-shim/dev";
 import { CloseEventP } from "./CloseEventP";
@@ -96,6 +97,7 @@ export class WebSocketP extends EventTargetP implements WebSocket {
 
     send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
         checkArgsLength(arguments.length, 1, "WebSocket", "send");
+
         if (this.readyState === 0 /* CONNECTING */) {
             throw new DOMException("Failed to execute 'send' on 'WebSocket': Still in CONNECTING state.", "InvalidStateError");
         }
@@ -104,13 +106,21 @@ export class WebSocketP extends EventTargetP implements WebSocket {
             return console.error("WebSocket is already in CLOSING or CLOSED state.");
         }
 
-        const transfer = (function (this: WebSocketP, data: string | ArrayBuffer) {
-            if (this.readyState !== 1 /* OPEN */) return;
-            state(this).socketTask.send({ data, fail(err: unknown) { console.error(err); } });
+        const _send = (function (this: WebSocketP, data: string | ArrayBuffer) {
+            if (this.readyState === 1 /* OPEN */) {
+                state(this).socketTask.send({
+                    data,
+                    fail(err: unknown) { console.error(err); },
+                });
+            }
         }).bind(this);
 
-        let payload = new Payload(data ?? "" + data);
-        payload.promise.then(transfer);
+        if (typeof data !== "string" && !isArrayBuffer(data) && !isBlob(data) && !ArrayBuffer.isView(data)) {
+            return _send(data as never);
+        }
+
+        const payload = new Payload(data);
+        payload.promise.then(function (_data) { _send(_data); });
     }
 
     get onclose() { return state(this).onclose; }
