@@ -13,7 +13,7 @@ mini-program (uniapp-test)
 
     Step 5:
         edit tests/utils.js    
-        change the config.ws_url to your local ip address.
+        change the testConfig.ws_url to your local ip address.
 
     Step 6: (optional)
         edit node_modules/uvu/dist/index.mjs
