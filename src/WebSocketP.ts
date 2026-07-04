@@ -90,7 +90,7 @@ export class WebSocketP extends EventTargetP implements WebSocket {
             code: code,
             reason: reason,
             fail(err: unknown) { console.error(err); },
-            complete: () => { s.readyState = 3 /* CLOSED */; },
+            complete: function () { s.readyState = 3 /* CLOSED */; },
         });
     }
 
@@ -155,10 +155,10 @@ class WebSocketState {
 
 function getHandlers(t: WebSocket) {
     return {
-        onclose: (ev: CloseEvent) => { executeFn(t, t.onclose, ev); },
-        onerror: (ev: Event) => { executeFn(t, t.onerror, ev); },
-        onmessage: (ev: MessageEvent) => { executeFn(t, t.onmessage, ev); },
-        onopen: (ev: Event) => { executeFn(t, t.onopen, ev); },
+        onclose: function (ev: CloseEvent) { executeFn(t, t.onclose, ev); },
+        onerror: function (ev: Event) { executeFn(t, t.onerror, ev); },
+        onmessage: function (ev: MessageEvent) { executeFn(t, t.onmessage, ev); },
+        onopen: function (ev: Event) { executeFn(t, t.onopen, ev); },
     };
 }
 
@@ -176,7 +176,7 @@ function emitEvent(target: EventTarget, type: string) {
 
 function onOpen(socket: WebSocketP) {
     let s = state(socket);
-    s.socketTask.onOpen(res => {
+    s.socketTask.onOpen(function (res) {
         if ("header" in res && res.header && typeof res.header === "object") {
             let headers = new Headers(res.header as Record<string, string>);
             s.protocol = headers.get("Sec-WebSocket-Protocol") || "";
@@ -189,7 +189,7 @@ function onOpen(socket: WebSocketP) {
 
 function onClose(socket: WebSocketP) {
     let s = state(socket);
-    s.socketTask.onClose(res => {
+    s.socketTask.onClose(function (res) {
         s.readyState = 3 /* CLOSED */;
         let event = new CloseEventP("close", {
             wasClean: !s.error,
@@ -204,7 +204,7 @@ function onClose(socket: WebSocketP) {
 
 function onError(socket: WebSocketP) {
     let s = state(socket);
-    s.socketTask.onError(res => {
+    s.socketTask.onError(function (res) {
         console.error(res);
         s.error = res;
         s.readyState = 3 /* CLOSED */;
@@ -213,7 +213,7 @@ function onError(socket: WebSocketP) {
 }
 
 function onMessage(socket: WebSocketP) {
-    state(socket).socketTask.onMessage(res => {
+    state(socket).socketTask.onMessage(function (res) {
         let data = res.data;
         let _data: string | ArrayBuffer | Blob;
 

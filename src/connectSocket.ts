@@ -24,7 +24,7 @@ export function getConnectSocketFunc() {
 
             onClose(listener) {
                 if (typeof listener === "function") {
-                    setTimeout(() => { listener({ code: 3009, reason: "NOT_SUPPORTED_ERR" }); });
+                    setTimeout(function () { listener({ code: 3009, reason: "NOT_SUPPORTED_ERR" }); }, 0);
                 }
             },
         };

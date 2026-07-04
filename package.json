@@ -21,8 +21,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "fetch-xhr-shim": "^0.0.1-beta",
-    "miniprogram-platform": "^0.0.1-beta"
+    "fetch-xhr-shim": ">=1.0.0",
+    "miniprogram-platform": ">=1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.3",
