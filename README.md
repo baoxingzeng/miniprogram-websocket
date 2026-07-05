@@ -2,6 +2,8 @@
 
 标准 [WebSocket API](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket) 的小程序 polyfill，提供与 Web 浏览器一致的接口实现。
 
+**[English](https://github.com/baoxingzeng/miniprogram-websocket/blob/main/README.en.md)**
+
 ## 小程序支持
 
 | 微信  | 支付宝 | 百度  | 字节跳动 |  QQ   | 快手  | 京东  | 小红书 |
@@ -15,6 +17,38 @@
 ```bash
 npm install miniprogram-websocket
 ```
+
+## 自动导入
+
+> **推荐**：小程序环境中没有 `globalThis`，无法像浏览器一样直接使用全局的 `WebSocket`，因此非常推荐配合 [unplugin-auto-import](https://www.npmjs.com/package/unplugin-auto-import) 等导入插件，免去手动写 `import` 语句的麻烦。
+
+如果你使用 unplugin-auto-import，可以这样配置：
+
+```javascript
+// 仅参考
+AutoImport({
+    // 其他配置
+
+    imports: [
+        // 其他导入
+
+        {
+            "miniprogram-websocket": [
+                "WebSocket",
+                "Blob", // 可选导入
+            ],
+        },
+
+        // 其他导入
+    ],
+
+    // 其他配置
+});
+```
+
+> **UniApp 开发者注意**：如果你的项目是通过 HBuilderX 基于 Vue 2 旧模板创建的，可能需要安装较低版本的 unplugin-auto-import（如 `0.16.7`）以兼容 CMD 模块格式。
+>
+> **支付宝小程序开发者注意**：支付宝官方将 `globalThis`、`window`、`document`、`WebSocket` 等浏览器内置对象名列为保留字，不应作为导入标识符使用，否则可能导致框架无法正常访问导入内容。如遇导入异常，可通过导入重命名规避，例如 `import { WebSocket as myWebSocket } from "..."`。
 
 ## 快速开始
 
@@ -130,7 +164,6 @@ new WebSocket(url: string, protocols?: string | string[])
 | `close()`                          | 关闭连接                           |
 | `close(code)`                      | 关闭连接，同时指定状态码           |
 | `close(code, reason)`              | 关闭连接，同时指定状态码与关闭原因 |
-| `addEventListener(type, listener)` | 添加事件监听器                     |
 
 **send 参数类型：** `string | ArrayBufferLike | Blob | ArrayBufferView`
 
