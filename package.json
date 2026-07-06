@@ -1,13 +1,13 @@
 {
   "name": "miniprogram-websocket",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": "Xingzeng Bao",
   "homepage": "https://github.com/baoxingzeng/miniprogram-websocket",
   "description": "A WebSocket API polyfill for mini programs.",
   "type": "module",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/miniprogram-websocket.cjs.js",
+  "module": "dist/miniprogram-websocket.esm.js",
   "types": "dist/index.d.ts",
   "files": [
     "README.md",
