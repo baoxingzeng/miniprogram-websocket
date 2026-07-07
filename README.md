@@ -63,39 +63,39 @@ socket.binaryType = "arraybuffer";
 
 // 监听连接建立
 socket.addEventListener("open", () => {
-  console.log("连接已建立");
+    console.log("连接已建立");
 
-  // 发送文本
-  socket.send("Hello Server!");
+    // 发送文本
+    socket.send("Hello Server!");
 
-  // 发送 Blob
-  const blob = new Blob(["Hello via Blob"]);
-  socket.send(blob);
+    // 发送 Blob
+    const blob = new Blob(["Hello via Blob"]);
+    socket.send(blob);
 });
 
 // 监听消息
 socket.addEventListener("message", (event) => {
-  if (event.data instanceof ArrayBuffer) {
-    // 二进制数据
-    const view = new DataView(event.data);
-    console.log(view.getInt32(0));
-  } else if (event.data instanceof Blob) {
-    // Blob 数据
-    event.data.text().then(console.log);
-  } else {
-    // 文本数据
-    console.log(event.data);
-  }
+    if (event.data instanceof ArrayBuffer) {
+        // 二进制数据
+        const view = new DataView(event.data);
+        console.log(view.getInt32(0));
+    } else if (event.data instanceof Blob) {
+        // Blob 数据
+        event.data.text().then(console.log);
+    } else {
+        // 文本数据
+        console.log(event.data);
+    }
 });
 
 // 监听连接关闭
 socket.addEventListener("close", (event) => {
-  console.log(`连接已关闭: code=${event.code}, reason=${event.reason}`);
+    console.log(`连接已关闭: code=${event.code}, reason=${event.reason}`);
 });
 
 // 监听连接错误
 socket.addEventListener("error", () => {
-  console.error("连接错误");
+    console.error("连接错误");
 });
 ```
 
@@ -158,12 +158,12 @@ new WebSocket(url: string, protocols?: string | string[])
 
 ### 方法
 
-| 方法                               | 说明                               |
-| ---------------------------------- | ---------------------------------- |
-| `send(data)`                       | 发送数据                           |
-| `close()`                          | 关闭连接                           |
-| `close(code)`                      | 关闭连接，同时指定状态码           |
-| `close(code, reason)`              | 关闭连接，同时指定状态码与关闭原因 |
+| 方法                  | 说明                               |
+| --------------------- | ---------------------------------- |
+| `send(data)`          | 发送数据                           |
+| `close()`             | 关闭连接                           |
+| `close(code)`         | 关闭连接，同时指定状态码           |
+| `close(code, reason)` | 关闭连接，同时指定状态码与关闭原因 |
 
 **send 参数类型：** `string | ArrayBufferLike | Blob | ArrayBufferView`
 

@@ -61,39 +61,39 @@ socket.binaryType = "arraybuffer";
 
 // Listen for connection open
 socket.addEventListener("open", () => {
-  console.log("Connection established");
+    console.log("Connection established");
 
-  // Send text
-  socket.send("Hello Server!");
+    // Send text
+    socket.send("Hello Server!");
 
-  // Send a Blob
-  const blob = new Blob(["Hello via Blob"]);
-  socket.send(blob);
+    // Send a Blob
+    const blob = new Blob(["Hello via Blob"]);
+    socket.send(blob);
 });
 
 // Listen for messages
 socket.addEventListener("message", (event) => {
-  if (event.data instanceof ArrayBuffer) {
-    // Binary data
-    const view = new DataView(event.data);
-    console.log(view.getInt32(0));
-  } else if (event.data instanceof Blob) {
-    // Blob data
-    event.data.text().then(console.log);
-  } else {
-    // Text data
-    console.log(event.data);
-  }
+    if (event.data instanceof ArrayBuffer) {
+        // Binary data
+        const view = new DataView(event.data);
+        console.log(view.getInt32(0));
+    } else if (event.data instanceof Blob) {
+        // Blob data
+        event.data.text().then(console.log);
+    } else {
+        // Text data
+        console.log(event.data);
+    }
 });
 
 // Listen for connection close
 socket.addEventListener("close", (event) => {
-  console.log(`Connection closed: code=${event.code}, reason=${event.reason}`);
+    console.log(`Connection closed: code=${event.code}, reason=${event.reason}`);
 });
 
 // Listen for errors
 socket.addEventListener("error", () => {
-  console.error("Connection error");
+    console.error("Connection error");
 });
 ```
 
