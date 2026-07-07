@@ -4,9 +4,9 @@ A [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) po
 
 ## Platform Support
 
-| WeChat | Alipay | Baidu | ByteDance |  QQ   | Kuaishou |  JD   | Xiaohongshu |
-| :----: | :----: | :---: | :-------: | :---: | :------: | :---: | :---------: |
-|   ✔    |   ✔    |   ✔   |     ✔     |   ✔   |    ✔     |   ✔   |      ✔      |
+| WeChat | Alipay | Baidu | ByteDance |  QQ   | Kwai  |  JD   | RedNote |
+| :----: | :----: | :---: | :-------: | :---: | :---: | :---: | :-----: |
+|   ✔    |   ✔    |   ✔   |     ✔     |   ✔   |   ✔   |   ✔   |    ✔    |
 
 > In browser environments such as Chrome, Firefox, Edge, and Safari, exported modules return native implementations directly with no additional overhead.
 
