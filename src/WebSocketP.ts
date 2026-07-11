@@ -215,10 +215,10 @@ function onClose(socket: WebSocketP) {
 function onError(socket: WebSocketP) {
     let s = state(socket);
     s.socketTask.onError(function (res) {
-        console.error(res);
         s.error = res;
         s.readyState = 3 /* CLOSED */;
         emitEvent(socket, "error");
+        console.error(res);
     });
 }
 
