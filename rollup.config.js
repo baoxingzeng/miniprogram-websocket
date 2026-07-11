@@ -1,6 +1,7 @@
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import { dts } from "rollup-plugin-dts";
+import { babel } from "@rollup/plugin-babel";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 export default [
@@ -39,6 +40,10 @@ export default [
                 moduleResolution: "bundler",
             }),
             nodeResolve(),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
+            }),
         ],
     },
 
@@ -55,6 +60,10 @@ export default [
                 moduleResolution: "bundler",
             }),
             nodeResolve(),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
+            }),
             terser(),
         ],
     },
@@ -94,6 +103,10 @@ export default [
                 moduleResolution: "bundler",
             }),
             nodeResolve(),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
+            }),
         ],
     },
 
@@ -110,6 +123,10 @@ export default [
                 moduleResolution: "bundler",
             }),
             nodeResolve(),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
+            }),
             terser(),
         ],
     },
