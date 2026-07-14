@@ -63,7 +63,7 @@ export class WebSocketP extends EventTargetP implements WebSocket {
             onError(this);
             onMessage(this);
         } else {
-            throw new Error(`connectSocket can't establish a connection to the server at ${"" + url}.`);
+            throw new Error(`connectSocket can't establish a connection to the server at ${targetURL}.`);
         }
     }
 
