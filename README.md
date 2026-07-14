@@ -18,45 +18,13 @@
 npm install miniprogram-websocket
 ```
 
-## 自动导入
-
-> **推荐**：小程序环境中没有 `globalThis`，无法像浏览器一样直接使用全局的 `WebSocket`，因此非常推荐配合 [unplugin-auto-import](https://www.npmjs.com/package/unplugin-auto-import) 等导入插件，免去手动写 `import` 语句的麻烦。
-
-如果你使用 unplugin-auto-import，可以这样配置：
-
-```javascript
-// 仅参考
-AutoImport({
-    // 其他配置
-
-    imports: [
-        // 其他导入
-
-        {
-            "miniprogram-websocket": [
-                "WebSocket",
-                "Blob", // 可选导入
-            ],
-        },
-
-        // 其他导入
-    ],
-
-    // 其他配置
-});
-```
-
-> **UniApp 开发者注意**：如果你的项目是通过 HBuilderX 基于 Vue 2 旧模板创建的，可能需要安装较低版本的 unplugin-auto-import（如 `0.16.7`）以兼容 CMD 模块格式。
->
-> **支付宝小程序开发者注意**：支付宝官方将 `globalThis`、`window`、`document`、`WebSocket` 等浏览器内置对象名列为保留字，不应作为导入标识符使用，否则可能导致框架无法正常访问导入内容。如遇导入异常，可通过导入重命名规避，例如 `import { WebSocket as myWebSocket } from "..."`。
-
 ## 快速开始
 
 ```javascript
 import { WebSocket, Blob } from "miniprogram-websocket";
 
 // 创建 WebSocket 连接
-const socket = new WebSocket("wss://example.com:8080");
+const socket = new WebSocket("wss://websocket.example.com");
 
 // 设置 binaryType 为 "arraybuffer"（默认为 "blob"）
 socket.binaryType = "arraybuffer";
@@ -99,6 +67,8 @@ socket.addEventListener("error", () => {
 });
 ```
 
+> **支付宝小程序开发者注意**：支付宝官方将 `globalThis`、`window`、`document`、`WebSocket` 等浏览器内置对象名列为保留字，不应作为导入标识符使用，否则可能导致框架无法正常访问导入内容。如遇导入异常，可通过导入重命名规避，例如 `import { WebSocket as myWebSocket } from "miniprogram-websocket";`。
+
 ### 使用事件属性
 
 除了 `addEventListener`，也可以使用 on-event 属性注册事件处理函数：
@@ -120,7 +90,7 @@ import { WebSocket, setConnectSocketFunc } from "miniprogram-websocket";
 // 传入平台原生的 connectSocket 函数
 setConnectSocketFunc(wx.connectSocket);
 
-const socket = new WebSocket("wss://example.com:8080");
+const socket = new WebSocket("wss://websocket.example.com");
 ```
 
 ## API
@@ -167,7 +137,7 @@ new WebSocket(url: string, protocols?: string | string[])
 
 **send 参数类型：** `string | ArrayBufferLike | Blob | ArrayBufferView`
 
-> `send()` 通过特征检测（feature detection）判断 Blob 类型，任何符合规范的 Blob 实现均可传入。为获得最佳兼容性，建议使用本库导出的 `Blob`。
+> `send()` 通过特征检测（feature detection）判断 Blob 类型，任何符合规范的 Blob 实现均可传入。
 
 ### 事件
 
@@ -180,7 +150,7 @@ new WebSocket(url: string, protocols?: string | string[])
 
 ## 导出说明
 
-本库导出的 `WebSocket` 和 `Blob` 在支持原生实现的运行环境中会直接返回原生对象；以 `P` 为后缀的 `WebSocketP` 和 `BlobP` 则为 polyfill 实现，始终使用本库提供的版本。
+`WebSocket` 和 `Blob` 在支持原生实现的运行环境中会直接返回原生对象；以 `P` 为后缀的 `WebSocketP` 和 `BlobP` 则为 polyfill 实现，请按需使用。
 
 > 注意：`WebSocketP` 仅适用于小程序环境，浏览器中不可用。
 
@@ -188,7 +158,7 @@ new WebSocket(url: string, protocols?: string | string[])
 import { WebSocket, WebSocketP, Blob, BlobP } from "miniprogram-websocket";
 ```
 
-## License
+## 开源协议
 
 MIT License
 

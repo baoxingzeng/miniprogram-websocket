@@ -2,7 +2,7 @@
 
 A [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) polyfill for mini programs, providing an interface consistent with standard web browsers.
 
-## Platform Support
+## Mini-Program Support
 
 | WeChat | Alipay | Baidu | ByteDance |  QQ   | Kwai  |  JD   | RedNote |
 | :----: | :----: | :---: | :-------: | :---: | :---: | :---: | :-----: |
@@ -16,45 +16,13 @@ A [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) po
 npm install miniprogram-websocket
 ```
 
-## Auto-import
-
-> **Recommended**: Mini programs lack `globalThis`, so the global `WebSocket` is unavailable as in browsers. Using import plugins like [unplugin-auto-import](https://www.npmjs.com/package/unplugin-auto-import) eliminates the need for manual `import` statements.
-
-Example configuration for unplugin-auto-import:
-
-```javascript
-// For reference only
-AutoImport({
-    // Other configurations
-
-    imports: [
-        // Other imports
-
-        {
-            "miniprogram-websocket": [
-                "WebSocket",
-                "Blob", // Optional
-            ],
-        },
-
-        // Other imports
-    ],
-
-    // Other configurations
-});
-```
-
-> **UniApp developers**: If your project was created via HBuilderX from an older Vue 2 template, you may need to install a lower version of unplugin-auto-import (e.g., `0.16.7`) for CMD module compatibility.
->
-> **Alipay Mini Program developers**: Alipay reserves `globalThis`, `window`, `document`, `WebSocket`, and other browser built-in names as restricted identifiers. Using them as import identifiers may prevent the framework from accessing the imported content. If you encounter import issues, use import aliasing as a workaround, e.g., `import { WebSocket as myWebSocket } from "..."`.
-
 ## Quick Start
 
 ```javascript
 import { WebSocket, Blob } from "miniprogram-websocket";
 
 // Create a WebSocket connection
-const socket = new WebSocket("wss://example.com:8080");
+const socket = new WebSocket("wss://websocket.example.com");
 
 // Set binaryType to "arraybuffer" (default is "blob")
 socket.binaryType = "arraybuffer";
@@ -97,6 +65,8 @@ socket.addEventListener("error", () => {
 });
 ```
 
+> **Alipay Mini Program developers**: Alipay reserves `globalThis`, `window`, `document`, `WebSocket`, and other browser built-in names as restricted identifiers. Using them as import identifiers may prevent the framework from accessing the imported content. If you encounter import issues, use import aliasing as a workaround, e.g., `import { WebSocket as myWebSocket } from "miniprogram-websocket";`.
+
 ### Using Event Handler Properties
 
 In addition to `addEventListener`, you can also use on-event properties:
@@ -118,7 +88,7 @@ import { WebSocket, setConnectSocketFunc } from "miniprogram-websocket";
 // Pass in the platform's native connectSocket function
 setConnectSocketFunc(wx.connectSocket);
 
-const socket = new WebSocket("wss://example.com:8080");
+const socket = new WebSocket("wss://websocket.example.com");
 ```
 
 ## API
@@ -165,7 +135,7 @@ new WebSocket(url: string, protocols?: string | string[])
 
 **send parameter types:** `string | ArrayBufferLike | Blob | ArrayBufferView`
 
-> `send()` detects Blob types via feature detection; any spec-compliant Blob implementation can be passed. For best compatibility, use the `Blob` exported by this library.
+> `send()` detects Blob types via feature detection; any spec-compliant Blob implementation can be passed.
 
 ### Events
 
@@ -178,7 +148,7 @@ new WebSocket(url: string, protocols?: string | string[])
 
 ## Exports
 
-The `WebSocket` and `Blob` exports return native objects in environments that support them. The `P`-suffixed variants `WebSocketP` and `BlobP` are the polyfill implementations, always using the library-provided version.
+The `WebSocket` and `Blob` exports return native objects in environments that support them. The `P`-suffixed variants `WebSocketP` and `BlobP` are the polyfill implementations, always using as needed.
 
 > Note: `WebSocketP` is only available in mini program environments and cannot be used in browsers.
 
