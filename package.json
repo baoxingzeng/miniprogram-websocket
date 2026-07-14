@@ -1,6 +1,6 @@
 {
   "name": "miniprogram-websocket",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "license": "MIT",
   "author": "Xingzeng Bao",
   "homepage": "https://github.com/baoxingzeng/miniprogram-websocket",
@@ -39,8 +39,8 @@
     "polyfill"
   ],
   "dependencies": {
-    "fetch-xhr-shim": ">=1.0.0",
-    "miniprogram-platform": ">=1.0.0"
+    "fetch-xhr-shim": ">=1.1.0",
+    "miniprogram-platform": ">=1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
