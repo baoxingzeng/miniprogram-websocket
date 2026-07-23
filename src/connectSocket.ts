@@ -9,7 +9,12 @@ export const platform = getPlatform() as {
 };
 
 export function getConnectSocketFunc() {
-    return platform ? platform.mp.connectSocket : function errorConnectSocket(options: IConnectSocketOption): ISocketTask {
+    const extractFn = function (platform: { mp: { connectSocket: TConnectSocketFunc } }) {
+        const connectSocket = platform && platform.mp.connectSocket;
+        return typeof connectSocket === "function" ? connectSocket.bind(platform.mp) : connectSocket;
+    }
+
+    return extractFn(platform) || function errorConnectSocket(options: IConnectSocketOption): ISocketTask {
         return {
             send(obj) { },
             close(obj) { },
@@ -18,13 +23,16 @@ export function getConnectSocketFunc() {
 
             onError(listener) {
                 if (typeof listener === "function") {
-                    listener({ errMsg: "NOT_SUPPORTED_ERR" });
+                    // DOMException (NotSupportedError)
+                    listener({ errMsg: "NOT_SUPPORTED_ERR", errno: 9 });
+                    setTimeout(function () { throw new ReferenceError("connectSocket is not defined"); }, 0);
                 }
             },
 
             onClose(listener) {
                 if (typeof listener === "function") {
-                    setTimeout(function () { listener({ code: 3009, reason: "NOT_SUPPORTED_ERR" }); }, 0);
+                    // Alipay Mini Program (code: 1000, 3000~4999)
+                    setTimeout(function () { listener({ code: 3000 + 9, reason: "NOT_SUPPORTED_ERR" }); }, 0);
                 }
             },
         };
@@ -76,7 +84,7 @@ export interface ISocketTask {
     close: (obj: { code?: number | undefined; reason?: string | undefined; success?: Function; fail?: Function; complete?: Function; }) => void;
     onOpen: (listener: (res: { header: object, profile: ISocketProfile }) => void) => void;
     onClose: (listener: (res: { code: number; reason: string }) => void) => void;
-    onError: (listener: (res: { errMsg: string }) => void) => void;
+    onError: (listener: (res: { errMsg: string, errno?: number }) => void) => void;
     onMessage: (listener: (res: { data: string | ArrayBuffer | { data: string; isBuffer: boolean } }) => void) => void;
 };
 
